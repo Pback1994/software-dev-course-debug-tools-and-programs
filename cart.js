@@ -1,28 +1,40 @@
 const cart = [
   { name: "Laptop", price: 1000 },
   { name: "Phone", price: 500 },
-  { name: "Headphones", price: 200 }
+  { name: "Headphones", price: 200 },
 ];
 
 function calculateTotal(cartItems) {
   let total = 0;
-  for (let i = 0; i <= cartItems.length; i++) { // Bug: <= should be <
-      total += cartItems[i].price; // Bug: cartItems[i] is undefined on the last iteration
+  for (let i = 0; i < cartItems.length; i++) {
+    // Bug: Change <= to be <
+    total += cartItems[i].price; // Bug: cartItems[i] is undefined on the last iteration
   }
   return total;
 }
 
 function applyDiscount(total, discountRate) {
-  return total - total * discountRate; // Bug: Missing validation for discountRate
+  if (discountRate !== "number" || discountRate < 0 || discountRate > 1) {
+    console.log("Invalid discount rate. Please enter a valid rate!");
+    return total;
+  }
+  return total - total * discountRate; // Bug: Added validation for discountRate
 }
 
 function generateReceipt(cartItems, total) {
+  if (total === NaN) {
+    console.log(
+      `Invalid, total is not a number. We cannot generate a receipt!`
+    );
+    return `Error generating a receipt!`;
+  }
   let receipt = "Items:\n";
-  cartItems.forEach(item => {
-      receipt += `${item.name}: $${item.price}\n`;
+  cartItems.forEach((item) => {
+    receipt += `${item.name}: $${item.price}\n`;
   });
-  receipt += `Total: $${total.toFixed(2)}`; // Bug: total may not be a number
+  receipt += `Total: $${total.toFixed(2)}`; // Bug: Added if stmt to check if total is a number.
   return receipt;
+  debugger;
 }
 
 // Debugging entry point
